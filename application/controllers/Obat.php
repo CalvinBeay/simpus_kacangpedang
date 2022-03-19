@@ -81,7 +81,7 @@ class Obat extends CI_Controller {
 
 	function delete($id)
 	{
-		$this->db->delete('obat', ['id' => $id]);
+		$this->db->delete('obat', ['id_obat' => $id]);
 		$this->session->set_flashdata('message', 
 			'<div class="alert alert-success" role="alert">Obat berhasil dihapus</div>'
 		);
@@ -105,7 +105,7 @@ class Obat extends CI_Controller {
 		$this->db->update('resep_obat');
 
 		$this->db->set('stok',$stok+$jumlah, FALSE);
-		$this->db->where('id', $id_obat);
+		$this->db->where('id_obat', $id_obat);
 		$this->db->update('obat');
 		
 		$this->session->set_flashdata('message', 
@@ -121,7 +121,7 @@ class Obat extends CI_Controller {
 		$data['user'] = $this->user;
 		$data['list_kategori'] = $this->puskes->list_kategori_obat();
 		$data['list_satuan_obat'] = $this->puskes->list_satuan_obat();
-		$data['obat'] = $this->db->get_where('obat', ['id' => $id])->row_array();
+		$data['obat'] = $this->db->get_where('obat', ['id_obat' => $id])->row_array();
 		$this->load->view('inc/header',$data);
 		$this->load->view('edit/edit_obat',$data);
 		$this->load->view('inc/footer');
@@ -145,7 +145,7 @@ class Obat extends CI_Controller {
 
 		} else {
 			$id = $this->input->post('id', true);
-			$stok = $this->db->get_where('obat', ['id' => $id])->row()->stok;
+			$stok = $this->db->get_where('obat', ['id_obat' => $id])->row()->stok;
 			if ($this->input->post('stok', true) > $stok) {
 				$this->session->set_flashdata('message', 
 					'<div class="alert alert-danger" role="alert">Silahkan Menambah Stok Di Pegadaan Obat!!</div>'
@@ -154,13 +154,13 @@ class Obat extends CI_Controller {
 			}
 			$data = [
 				'nama_obat' => $this->input->post('nama', true),
-				'kategori' => $this->input->post('kategori-obat', true),
-				'satuan' => $this->input->post('satuan-obat', true),
+				'id_kategori_obat' => $this->input->post('kategori-obat', true),
+				'id_satuan' => $this->input->post('satuan-obat', true),
 				'keterangan' => $this->input->post('keterangan'),
 				'stok' => $this->input->post('stok',true)
 			];
 
-			$this->db->where('id', $id);
+			$this->db->where('id_obat', $id);
 			$this->db->update('obat', $data);
 			$this->session->set_flashdata('message', 
 				'<div class="alert alert-success" role="alert">Data Obat berhasil diubah</div>'
